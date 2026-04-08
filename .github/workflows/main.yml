@@ -1,0 +1,49 @@
+name: Build Android App
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Build version'
+        default: '1'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Download Solar2D
+        run: |
+          SOLAR2D_VERSION=$(curl -s https://api.github.com/repos/coronalabs/corona/releases/latest | grep '"tag_name"' | sed 's/.*"tag_name": "\(.*\)".*/\1/')
+          echo "Using Solar2D version: $SOLAR2D_VERSION"
+          curl -L "https://github.com/coronalabs/corona/releases/download/${SOLAR2D_VERSION}/Corona-${SOLAR2D_VERSION}-linux.tgz" -o solar2d.tgz
+          tar xzf solar2d.tgz
+          ls -la
+
+      - name: Generate debug keystore
+        run: |
+          keytool -genkey -v \
+            -keystore Util/android.keystore \
+            -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass android -keypass android \
+            -dname "CN=Android Debug,O=Android,C=US" 2>/dev/null
+
+      - name: Build Android APK
+        run: |
+          lua Util/recipe.lua
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AndroidBuild
+          path: "**/*.apk"
