@@ -18,14 +18,11 @@ jobs:
 
       - uses: dapetcu21/setup-defold@v3.0.2
 
-      - name: Resolve dependencies
-        run: java -jar $BOB --platform armv7-android resolve
-
-      - name: Build project
-        run: java -jar $BOB --platform armv7-android build
-
-      - name: Bundle APK
-        run: java -jar $BOB --platform armv7-android --variant debug bundle
+      - name: Build and Bundle APK
+        run: |
+          java -jar $BOB --platform armv7-android resolve
+          java -jar $BOB --platform armv7-android --archive build
+          java -jar $BOB --platform armv7-android --variant debug --archive bundle
 
       - uses: actions/upload-artifact@v4
         with:
