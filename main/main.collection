@@ -1,2 +1,10 @@
 name: "main"
 scale_along_z: 0
+
+embedded_instances {
+  id: "go"
+  data: "components { id: \"script\" component: \"/main/main.script\" }\n"
+  position { x: 0 y: 0 z: 0 }
+  rotation { x: 0 y: 0 z: 0 w: 1 }
+  scale3 { x: 1 y: 1 z: 1 }
+}
