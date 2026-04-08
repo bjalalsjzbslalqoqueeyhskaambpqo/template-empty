@@ -1,0 +1,12 @@
+settings = {
+    orientation = {
+        default = "portrait",
+        supported = { "portrait" },
+    },
+    android = {
+        minSdkVersion = "21",
+        targetSdkVersion = "33",
+        versionCode = 1,
+    },
+    plugins = {},
+}
