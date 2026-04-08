@@ -13,6 +13,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
+          check-latest: true
       - uses: dapetcu21/setup-defold@v3.0.2
       - run: java -jar $BOB --platform armv7-android --variant debug bundle
       - uses: actions/upload-artifact@v4
